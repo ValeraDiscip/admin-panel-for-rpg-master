@@ -1,0 +1,4 @@
+FROM postgres:latest
+ENV POSTGRES_DB admin_panel
+ENV POSTGRES_USER admin_panel
+ENV POSTGRES_PASSWORD admin_panel
