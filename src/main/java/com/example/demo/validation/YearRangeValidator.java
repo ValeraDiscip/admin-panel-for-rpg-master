@@ -15,9 +15,6 @@ public class YearRangeValidator implements ConstraintValidator<YearRange, Date> 
 
     @Override
     public boolean isValid(Date date, ConstraintValidatorContext constraintValidatorContext) {
-        if (date == null || date.getYear() < startYear || date.getYear() > endYear) {
-            return false;
-        }
-        return true;
+        return date != null && date.getYear() >= startYear && date.getYear() <= endYear;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.demo.filter;
 
 public enum PlayerOrder {
+
     ID("id"), // default
     NAME("name"),
     EXPERIENCE("experience"),
@@ -16,4 +17,5 @@ public enum PlayerOrder {
     public String getFieldName() {
         return fieldName;
     }
+
 }
