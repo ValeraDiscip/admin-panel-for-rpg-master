@@ -5,11 +5,15 @@ import com.example.demo.entity.Race;
 import com.example.demo.validation.YearRange;
 import lombok.Data;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import java.util.Date;
+
 @Data
 public class UpdatePlayerRequest {
-    @NotEmpty(message = "Name can not be empty.")
+    @NotEmpty(message = "Name can not be empty.", )
     @Size(max = 12, message = "Name can not be more than 12 chars")
     private String name;
     @NotEmpty(message = "Title can not be empty.")
