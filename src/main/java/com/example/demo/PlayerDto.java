@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Data
 public class PlayerDto {
+    private int id;
     private String name;
     private String title;
     private Race race;
@@ -18,4 +19,5 @@ public class PlayerDto {
     private int level;
     private int untilNextLevel;
 }
+//спросить про проблему с id
 //здесь должны быть все данные или они будут только в обьекте player

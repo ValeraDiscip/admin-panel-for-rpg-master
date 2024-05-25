@@ -8,6 +8,7 @@ import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
 import com.example.demo.filter.PlayerOrder;
 import com.example.demo.service.PlayerDataTransformerService;
+import com.example.demo.service.PlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +37,8 @@ public class PlayerController implements MyController {
     @Override
     public ResponseEntity<PlayerDto> createNewPlayer(PlayerRequest createPlayerRequest) {
        PlayerDto playerDto = PlayerDataTransformerService.transformToCreate(createPlayerRequest);
-       return new ResponseEntity<>(playerDto, HttpStatus.CREATED);
+        PlayerService.createNewPlayer(playerDto);
+        return new ResponseEntity<>(playerDto, HttpStatus.CREATED);
     }
 
     @Override
