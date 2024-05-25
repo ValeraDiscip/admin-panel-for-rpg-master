@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.PlayerDto;
+import com.example.demo.dto.PlayerDto;
 import com.example.demo.controller.request.PlayerRequest;
 import com.example.demo.controller.request.UpdatePlayerRequest;
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
+import com.example.demo.dto.Profession;
+import com.example.demo.dto.Race;
 import com.example.demo.filter.PlayerOrder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,12 +35,6 @@ public interface PlayerController {
                                                   @RequestParam(required = false, defaultValue = "0") int pageNumber,
                                                   @RequestParam(required = false, defaultValue = "3") int pageSize);
 
-    //в какую сущность это лучше засунуть не понимаю как лучше сделать
-    ResponseEntity<List<PlayerDto>> getPlayerList(String name, String title, Race race,
-                                                  Profession profession, long after, long before,
-                                                  boolean banned, int minExperience, int maxExperience,
-                                                  int minLevel, int maxLevel, PlayerOrder order,
-                                                  int pageNumber, int pageSize);
 
     @PostMapping
     PlayerDto createNewPlayer(@Valid @RequestBody PlayerRequest createPlayerRequest);

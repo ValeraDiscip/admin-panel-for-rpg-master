@@ -1,7 +1,7 @@
 package com.example.demo.controller.request;
 
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
+import com.example.demo.dto.Profession;
+import com.example.demo.dto.Race;
 import com.example.demo.validation.YearRange;
 import lombok.Data;
 

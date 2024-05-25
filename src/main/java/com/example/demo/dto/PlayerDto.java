@@ -1,13 +1,12 @@
-package com.example.demo;
+package com.example.demo.dto;
 
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
 public class PlayerDto {
+    private long id;
     private String name;
     private String title;
     private Race race;

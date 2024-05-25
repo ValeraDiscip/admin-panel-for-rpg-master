@@ -1,7 +1,7 @@
 package com.example.demo.controller.request;
 
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
+import com.example.demo.dto.Profession;
+import com.example.demo.dto.Race;
 import com.example.demo.validation.YearRange;
 import lombok.Data;
 
@@ -13,7 +13,7 @@ import java.util.Date;
 
 @Data
 public class UpdatePlayerRequest {
-    @NotEmpty(message = "Name can not be empty.", )
+    @NotEmpty(message = "Name can not be empty.")
     @Size(max = 12, message = "Name can not be more than 12 chars")
     private String name;
     @NotEmpty(message = "Title can not be empty.")

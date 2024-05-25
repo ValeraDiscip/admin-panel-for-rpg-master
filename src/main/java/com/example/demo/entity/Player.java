@@ -1,7 +1,7 @@
-package com.example.demo;
+package com.example.demo.entity;
 
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
+import com.example.demo.dto.Profession;
+import com.example.demo.dto.Race;
 import lombok.Data;
 
 import java.util.Date;

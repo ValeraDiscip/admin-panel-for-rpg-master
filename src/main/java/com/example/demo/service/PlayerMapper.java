@@ -1,12 +1,14 @@
 package com.example.demo.service;
 
-import com.example.demo.PlayerDto;
-import com.example.demo.controller.request.PlayerFilter;
+import com.example.demo.dto.PlayerDto;
+import com.example.demo.dto.PlayerFilter;
 import com.example.demo.controller.request.PlayerRequest;
 import com.example.demo.controller.request.UpdatePlayerRequest;
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
+import com.example.demo.dto.Profession;
+import com.example.demo.dto.Race;
 import com.example.demo.filter.PlayerOrder;
+
+import java.util.Date;
 
 //как лучше поступить переименовать класс этот на TransformerService так как один метод не подходит по названию в этот класс
 // ЛИБО создать отдельный сервис ради этого метода типа такой вопрос!
@@ -37,13 +39,14 @@ public class PlayerMapper {
     }
 
     public static PlayerFilter mapToFilter(String name, String title, Race race,
-                                           Profession profession, long after, long before,
+                                           Profession profession, Date after, Date before,
                                            boolean banned, int minExperience, int maxExperience,
                                            int minLevel, int maxLevel, PlayerOrder order,
                                            int pageNumber, int pageSize) {
-        return PlayerFilter.builder()
-                .name(name)
-                .after(after)
-                .build();
+//        return PlayerFilter.builder()
+//                .name(name)
+//                .after(after)
+//                .build();
+        return null;
     }
 }
