@@ -31,7 +31,7 @@ public class PlayerMapper {
                 .race(updatePlayerRequest.getRace())
                 .profession(updatePlayerRequest.getProfession())
                 .birthday(updatePlayerRequest.getBirthday())
-                .banned(updatePlayerRequest.isBanned())
+                .banned(updatePlayerRequest.getBanned())
                 .experience(updatePlayerRequest.getExperience())
                 .build();
     }
