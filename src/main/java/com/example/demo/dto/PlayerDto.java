@@ -1,20 +1,20 @@
 package com.example.demo.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
-
+@Builder
 @Data
 public class PlayerDto {
-    private long id;
+    private Long id;
     private String name;
     private String title;
     private Race race;
     private Profession profession;
     private Date birthday;
-    private boolean banned = false;
-    private int experience;
-    private int level;
-    private int untilNextLevel;
+    private Boolean banned;
+    private Integer experience;
+    private Integer level;
+    private Integer untilNextLevel;
 }
-//здесь должны быть все данные или они будут только в обьекте player
