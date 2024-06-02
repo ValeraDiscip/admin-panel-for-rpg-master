@@ -1,0 +1,163 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="create-table-player" author="Valera">
+        <sql>
+            CREATE TABLE player
+            (
+                id             BIGINT(20)  NOT NULL AUTO_INCREMENT,
+                name           VARCHAR(12) NULL,
+                title          VARCHAR(30) NULL,
+                race_id        VARCHAR(20) NULL,
+                profession_id  VARCHAR(20) NULL,
+                birthday       DATE NULL,
+                banned         BIT(1) NULL,
+                experience     INT(10)     NULL,
+                level          INT(3)      NULL,т
+                untilNextLevel INT(10)     NULL,
+                PRIMARY KEY (id),
+                FOREIGN KEY (race_id) REFERENCES race (id),
+                FOREIGN KEY (profession_id) REFERENCES profession (id);
+            )
+        </sql>
+
+
+        <createTable tableName="player">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(12)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="race_id" type="varchar(20)">
+                <constraints foreignKeyName="player_race_id_race_id" references="race(id)"/>
+            </column>
+            <column name="profession_id" type="varchar(20)">
+                <constraints foreignKeyName="player_profession_id_profession_id"
+                             references="profession(id)"/>
+            </column>
+            <column name="birthday" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="banned" type="bit(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="experience" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="untilNextLevel" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="create-table-race" author="Valera">
+        <sql>
+            CREATE TABLE race
+            (
+                id   BIGINT(20)  NOT NULL AUTO_INCREMENT,
+                name VARCHAR(20) NULL;
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="create-table-race" author="Valera">
+
+        <createTable tableName="race">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(20)">
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-profession" author="Valera">
+        <sql>
+            CREATE TABLE profession
+            (
+                id   BIGINT(20)  NOT NULL AUTO_INCREMENT,
+                name VARCHAR(20) NULL;
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="create-table-profession" author="Valera">
+
+        <createTable tableName="profession">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(20)">
+            </column>
+
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="insert-into-race" author="Valera">
+        <sql>
+            INSERT INTO race (name)
+            VALUES (HUMAN),
+                   (DWARF),
+                   (ELF),
+                   (GIANT),
+                   (ORC),
+                   (TROLL),
+                   (HOBBIT);
+        </sql>
+    </changeSet>
+
+    <changeSet id="insert-into-race" author="Valera">
+        <insert tableName="race">
+            <column name="name" value="HUMAN"/>
+            <column name="name" value="DWARF"/>
+            <column name="name" value="ELF"/>
+            <column name="name" value="GIANT"/>
+            <column name="name" value="ORC"/>
+            <column name="name" value="TROLL"/>
+            <column name="name" value="HOBBIT"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="insert-into-profession" author="Valera">
+        <sql>
+            INSERT INTO race (name)
+            VALUES (WARRIOR),
+                   (ROGUE),
+                   (SORCERER),
+                   (CLERIC),
+                   (PALADIN),
+                   (NAZGUL),
+                   (WARLOCK),
+                   (DRUID);
+        </sql>
+    </changeSet>
+
+    <changeSet id="insert-into-profession" author="Valera">
+        <insert tableName="profession">
+            <column name="name" value="WARRIOR"/>
+            <column name="name" value="ROGUE"/>
+            <column name="name" value="SORCERER"/>
+            <column name="name" value="CLERIC"/>
+            <column name="name" value="PALADIN"/>
+            <column name="name" value="NAZGUL"/>
+            <column name="name" value="WARLOCK"/>
+            <column name="name" value="DRUID"/>
+        </insert>
+
+    </changeSet>
+</databaseChangeLog>
