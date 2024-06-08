@@ -4,7 +4,12 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
-    <changeSet id="create-table-player" author="Valera">
+    <changeSet id="tack1-create-table-race" author="Valera">
+        <preConditions>
+            <not>
+                <tableExists tableName="race"/>
+            </not>
+        </preConditions>
         <sql>
             CREATE TABLE race
             (
@@ -248,11 +253,6 @@
                 <tableExists tableName="race"/>
                 <tableExists tableName="profession"/>
             </and>
-            <not>
-                <tableExists tableName="player"/>
-            </not>
-            <tableExists tableName="race"/>
-            <tableExists tableName="profession"/>
         </preConditions>
         <sql>
             CREATE TABLE player

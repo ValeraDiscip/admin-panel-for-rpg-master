@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @Validated
@@ -32,7 +32,7 @@ public interface PlayerController {
                                @RequestParam(required = false) Integer maxExperience,
                                @RequestParam(required = false) Integer minLevel,
                                @RequestParam(required = false) Integer maxLevel,
-                               @RequestParam(required = false, defaultValue = "id") PlayerOrder order,
+                               @RequestParam(required = false, defaultValue = "ID") PlayerOrder order,
                                @RequestParam(required = false, defaultValue = "1") Integer pageNumber,
                                @RequestParam(required = false, defaultValue = "3") Integer pageSize);
 
