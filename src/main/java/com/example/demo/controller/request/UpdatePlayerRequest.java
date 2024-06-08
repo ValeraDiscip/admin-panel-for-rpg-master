@@ -9,7 +9,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.sql.Date;
 
 @Data
 public class UpdatePlayerRequest {

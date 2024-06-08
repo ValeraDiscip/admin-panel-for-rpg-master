@@ -6,158 +6,269 @@
 
     <changeSet id="create-table-player" author="Valera">
         <sql>
-            CREATE TABLE player
-            (
-                id             BIGINT(20)  NOT NULL AUTO_INCREMENT,
-                name           VARCHAR(12) NULL,
-                title          VARCHAR(30) NULL,
-                race_id        VARCHAR(20) NULL,
-                profession_id  VARCHAR(20) NULL,
-                birthday       DATE NULL,
-                banned         BIT(1) NULL,
-                experience     INT(10)     NULL,
-                level          INT(3)      NULL,т
-                untilNextLevel INT(10)     NULL,
-                PRIMARY KEY (id),
-                FOREIGN KEY (race_id) REFERENCES race (id),
-                FOREIGN KEY (profession_id) REFERENCES profession (id);
-            )
-        </sql>
-
-
-        <createTable tableName="player">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="name" type="varchar(12)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="title" type="varchar(30)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="race_id" type="varchar(20)">
-                <constraints foreignKeyName="player_race_id_race_id" references="race(id)"/>
-            </column>
-            <column name="profession_id" type="varchar(20)">
-                <constraints foreignKeyName="player_profession_id_profession_id"
-                             references="profession(id)"/>
-            </column>
-            <column name="birthday" type="date">
-                <constraints nullable="false"/>
-            </column>
-            <column name="banned" type="bit(1)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="experience" type="int">
-                <constraints nullable="false"/>
-            </column>
-            <column name="level" type="int">
-                <constraints nullable="false"/>
-            </column>
-            <column name="untilNextLevel" type="int">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-    </changeSet>
-
-    <changeSet id="create-table-race" author="Valera">
-        <sql>
             CREATE TABLE race
             (
-                id   BIGINT(20)  NOT NULL AUTO_INCREMENT,
-                name VARCHAR(20) NULL;
+                id   SERIAL PRIMARY KEY NOT NULL,
+                name VARCHAR(20)        NOT NULL
             )
         </sql>
     </changeSet>
 
-    <changeSet id="create-table-race" author="Valera">
-
-        <createTable tableName="race">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-
-            <column name="name" type="varchar(20)">
-            </column>
-
-        </createTable>
+    <changeSet id="task1-insert-HUMAN-into-race" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM race
+                WHERE name = 'HUMAN'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO race (name)
+            values ('HUMAN')
+        </sql>
     </changeSet>
 
-    <changeSet id="create-table-profession" author="Valera">
+    <changeSet id="task1-insert-DWARF-into-race" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM race
+                WHERE name = 'DWARF'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO race (name)
+            values ('DWARF')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-ELF-into-race" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM race
+                WHERE name = 'ELF'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO race (name)
+            values ('ELF')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-GIANT-into-race" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM race
+                WHERE name = 'GIANT'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO race (name)
+            values ('GIANT')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-ORC-into-race" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM race
+                WHERE name = 'ORC'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO race (name)
+            values ('ORC')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-TROLL-into-race" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM race
+                WHERE name = 'TROLL'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO race (name)
+            values ('TROLL')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-HOBBIT-into-race" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM race
+                WHERE name = 'HOBBIT'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO race (name)
+            values ('HOBBIT')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-create-table-profession" author="Valera">
+        <preConditions>
+            <not>
+                <tableExists tableName="profession"/>
+            </not>
+        </preConditions>
         <sql>
             CREATE TABLE profession
             (
-                id   BIGINT(20)  NOT NULL AUTO_INCREMENT,
-                name VARCHAR(20) NULL;
+                id   SERIAL PRIMARY KEY NOT NULL,
+                name VARCHAR(20)        NOT NULL
             )
         </sql>
     </changeSet>
 
-    <changeSet id="create-table-profession" author="Valera">
-
-        <createTable tableName="profession">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="name" type="varchar(20)">
-            </column>
-
-        </createTable>
-
-    </changeSet>
-
-    <changeSet id="insert-into-race" author="Valera">
+    <changeSet id="task1-insert-WARRIOR-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'WARRIOR'
+            </sqlCheck>
+        </preConditions>
         <sql>
-            INSERT INTO race (name)
-            VALUES (HUMAN),
-                   (DWARF),
-                   (ELF),
-                   (GIANT),
-                   (ORC),
-                   (TROLL),
-                   (HOBBIT);
+            INSERT INTO profession (name)
+            values ('WARRIOR')
         </sql>
     </changeSet>
 
-    <changeSet id="insert-into-race" author="Valera">
-        <insert tableName="race">
-            <column name="name" value="HUMAN"/>
-            <column name="name" value="DWARF"/>
-            <column name="name" value="ELF"/>
-            <column name="name" value="GIANT"/>
-            <column name="name" value="ORC"/>
-            <column name="name" value="TROLL"/>
-            <column name="name" value="HOBBIT"/>
-        </insert>
-
-    </changeSet>
-
-    <changeSet id="insert-into-profession" author="Valera">
+    <changeSet id="task1-insert-ROGUE-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'ROGUE'
+            </sqlCheck>
+        </preConditions>
         <sql>
-            INSERT INTO race (name)
-            VALUES (WARRIOR),
-                   (ROGUE),
-                   (SORCERER),
-                   (CLERIC),
-                   (PALADIN),
-                   (NAZGUL),
-                   (WARLOCK),
-                   (DRUID);
+            INSERT INTO profession (name)
+            values ('ROGUE')
         </sql>
     </changeSet>
 
-    <changeSet id="insert-into-profession" author="Valera">
-        <insert tableName="profession">
-            <column name="name" value="WARRIOR"/>
-            <column name="name" value="ROGUE"/>
-            <column name="name" value="SORCERER"/>
-            <column name="name" value="CLERIC"/>
-            <column name="name" value="PALADIN"/>
-            <column name="name" value="NAZGUL"/>
-            <column name="name" value="WARLOCK"/>
-            <column name="name" value="DRUID"/>
-        </insert>
-
+    <changeSet id="task1-insert-SORCERER-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'SORCERER'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO profession (name)
+            values ('SORCERER')
+        </sql>
     </changeSet>
+
+    <changeSet id="task1-insert-CLERIC-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'CLERIC'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO profession (name)
+            values ('CLERIC')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-PALADIN-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'PALADIN'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO profession (name)
+            values ('PALADIN')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-NAZGUL-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'NAZGUL'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO profession (name)
+            values ('NAZGUL')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-WARLOCK-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'WARLOCK'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO profession (name)
+            values ('WARLOCK')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-DRUID-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'DRUID'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO profession (name)
+            values ('DRUID')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-create-table-player" author="Valera">
+        <preConditions>
+            <and>
+                <not>
+                    <tableExists tableName="player"/>
+                </not>
+                <tableExists tableName="race"/>
+                <tableExists tableName="profession"/>
+            </and>
+            <not>
+                <tableExists tableName="player"/>
+            </not>
+            <tableExists tableName="race"/>
+            <tableExists tableName="profession"/>
+        </preConditions>
+        <sql>
+            CREATE TABLE player
+            (
+                id             BIGSERIAL PRIMARY KEY          NOT NULL,
+                name           VARCHAR(12)                    NOT NULL,
+                title          VARCHAR(30)                    NOT NULL,
+                race_id        INT REFERENCES race (id)       NOT NULL,
+                profession_id  INT REFERENCES profession (id) NOT NULL,
+                birthday       DATE                           NOT NULL,
+                banned         BOOLEAN                        NOT NULL,
+                experience     INT                            NOT NULL,
+                level          INT                            NOT NULL,
+                untilNextLevel INT                            NOT NULL
+            )
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

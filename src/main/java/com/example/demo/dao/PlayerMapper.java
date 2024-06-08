@@ -15,11 +15,12 @@ public class PlayerMapper implements RowMapper<Player> {
                 .id(resultSet.getLong("id"))
                 .name(resultSet.getString("name"))
                 .title(resultSet.getString("title"))
-                .race(resultSet.getObject("race", Race.class))
-                .profession(resultSet.getObject("profession", Profession.class))
+                .race(Race.valueOf(resultSet.getString("race_name")))
+                .profession(Profession.valueOf(resultSet.getString("profession_name")))
                 .birthday(resultSet.getDate("birthday"))
                 .banned(resultSet.getBoolean("banned"))
                 .experience(resultSet.getInt("experience"))
+                .level(resultSet.getInt("level"))
                 .untilNextLevel(resultSet.getInt("untilNextLevel"))
                 .build();
     }

@@ -1,5 +1,8 @@
 package com.example.demo.filter;
 
+import lombok.Getter;
+
+@Getter
 public enum PlayerOrder {
 
     ID("id"), // default
@@ -12,10 +15,6 @@ public enum PlayerOrder {
 
     PlayerOrder(String fieldName) {
         this.fieldName = fieldName;
-    }
-
-    public String getFieldName() {
-        return fieldName;
     }
 
 }

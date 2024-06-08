@@ -5,7 +5,7 @@ import com.example.demo.dto.Race;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
+import java.sql.Date;
 @Builder
 @Data
 public class Player {
@@ -20,4 +20,3 @@ public class Player {
     private Integer level;
     private Integer untilNextLevel;
 }
-

@@ -1,9 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.PlayerDto;
-import com.example.demo.dto.PlayerFilter;
 import com.example.demo.controller.request.PlayerRequest;
 import com.example.demo.controller.request.UpdatePlayerRequest;
+import com.example.demo.dto.PlayerDto;
+import com.example.demo.dto.PlayerFilter;
 import com.example.demo.dto.Profession;
 import com.example.demo.dto.Race;
 import com.example.demo.filter.PlayerOrder;
@@ -24,8 +24,9 @@ public class PlayerMapper {
                 .build();
     }
 
-    public static PlayerDto mapToPlayerDto(UpdatePlayerRequest updatePlayerRequest) {
+    public static PlayerDto mapToPlayerDto(UpdatePlayerRequest updatePlayerRequest, long id) {
         return PlayerDto.builder()
+                .id(id)
                 .name(updatePlayerRequest.getName())
                 .title(updatePlayerRequest.getTitle())
                 .race(updatePlayerRequest.getRace())
@@ -38,9 +39,9 @@ public class PlayerMapper {
 
     public static PlayerFilter mapToPlayerFilter(String name, String title, Race race,
                                                  Profession profession, Date after, Date before,
-                                                 boolean banned, int minExperience, int maxExperience,
-                                                 int minLevel, int maxLevel, PlayerOrder order,
-                                                 int pageNumber, int pageSize) {
+                                                 Boolean banned, Integer minExperience, Integer maxExperience,
+                                                 Integer minLevel, Integer maxLevel, PlayerOrder order,
+                                                 Integer pageNumber, Integer pageSize) {
 
         return PlayerFilter.builder()
                 .name(name)

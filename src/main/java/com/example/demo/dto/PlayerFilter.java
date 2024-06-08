@@ -15,13 +15,12 @@ public class PlayerFilter {
     private Profession profession;
     private Date after;
     private Date before;
-    private boolean banned;
-    private int minExperience;
-    private int maxExperience;
-    private int minLevel;
-    private int maxLevel;
+    private Boolean banned;
+    private Integer minExperience;
+    private Integer maxExperience;
+    private Integer minLevel;
+    private Integer maxLevel;
     private PlayerOrder order;
-    private int pageNumber;
-    private int pageSize;
-    //TODO primitive
+    private Integer pageNumber;
+    private Integer pageSize;
 }

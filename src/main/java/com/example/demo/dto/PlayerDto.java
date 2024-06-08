@@ -3,7 +3,7 @@ package com.example.demo.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
+import java.sql.Date;
 @Builder
 @Data
 public class PlayerDto {
