@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 @Validated

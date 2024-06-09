@@ -5,7 +5,7 @@ import com.example.demo.dto.Race;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Date;
+import java.util.Date;
 @Builder
 @Data
 public class Player {

@@ -32,7 +32,7 @@ public class PlayerDaoImpl implements PlayerDao {
         StringBuilder sql = new StringBuilder("SELECT player.id, player.name, title, " +
                 "race.name as race_name, profession.name as profession_name, birthday, banned, " +
                 "experience, level, untilNextLevel FROM player JOIN race ON player.race_id = race.id " +
-                "JOIN profession ON player.profession_id = profession.id WHERE ");
+                "JOIN profession ON player.profession_id = profession.id");
 
         List<Object> params = new ArrayList<>();
 
@@ -50,11 +50,11 @@ public class PlayerDaoImpl implements PlayerDao {
         }
         if (playerFilter.getRace() != null) {
             clauses.add("race.name = ?");
-            params.add(playerFilter.getRace());
+            params.add(playerFilter.getRace().name());
         }
         if (playerFilter.getProfession() != null) {
             clauses.add("profession.name = ?");
-            params.add(playerFilter.getProfession());
+            params.add(playerFilter.getProfession().name());
         }
         if (playerFilter.getAfter() != null) {
             clauses.add("birthday > ?");
@@ -84,9 +84,11 @@ public class PlayerDaoImpl implements PlayerDao {
             clauses.add("banned = ?");
             params.add(playerFilter.getBanned());
         }
-
-        String clausesString = String.join(" and ", clauses);
-        sql.append(clausesString);
+        if (!clauses.isEmpty()) {
+            sql.append(" WHERE ");
+            String clausesString = String.join(" and ", clauses);
+            sql.append(clausesString);
+        }
 
         sql.append(" ORDER BY " + playerFilter.getOrder());
         sql.append(" OFFSET " + offSet);
@@ -99,9 +101,6 @@ public class PlayerDaoImpl implements PlayerDao {
         }
     }
 
-    //использовать SimpleJdbcInsert или KeyHolder
-    //разобрать SimpleJdbcInsert ВМЕСТЕ ТАК КАК НЕ ВСЕ ПОНЯТНО!
-    //задать вопрос про date пришлось переделать в sql.date только так заработало почему так и в чем разница
     @Override
     public Player create(Player player) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -116,7 +115,8 @@ public class PlayerDaoImpl implements PlayerDao {
             ps.setString(2, player.getTitle());
             ps.setString(3, player.getRace().name());
             ps.setString(4, player.getProfession().name());
-            ps.setDate(5, player.getBirthday());
+            Date date = new Date(player.getBirthday().getTime());
+            ps.setDate(5, date);
             ps.setBoolean(6, player.getBanned());
             ps.setInt(7, player.getExperience());
             ps.setInt(8, player.getLevel());
@@ -126,12 +126,6 @@ public class PlayerDaoImpl implements PlayerDao {
 
         return getById((Long) keyHolder.getKey());
 
-//        jdbcTemplate.update("INSERT INTO player (name, title, race_id, profession_id, birthday, banned, experience, level, untilnextlevel)\n" +
-//                        "VALUES  (?, ?, (Select id from race where race.name = ?), " +
-//                        "(Select id from profession where profession.name = ?), ?, ?, ?, ?, ?)", player.getName(), player.getTitle(),
-//                player.getRace().name(), player.getProfession().name(), player.getBirthday(), player.getBanned(), player.getExperience(), player.getLevel(), player.getUntilNextLevel());
-//
-//        return null;
     }
 
     @Override
