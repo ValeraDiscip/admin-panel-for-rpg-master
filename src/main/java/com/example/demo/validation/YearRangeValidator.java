@@ -2,7 +2,7 @@ package com.example.demo.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.Date;
+import java.sql.Date;
 
 public class YearRangeValidator implements ConstraintValidator<YearRange, Date> {
     private int startYear;

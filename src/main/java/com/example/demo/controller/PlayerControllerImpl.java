@@ -6,6 +6,7 @@ import com.example.demo.controller.request.PlayerRequest;
 import com.example.demo.controller.request.UpdatePlayerRequest;
 import com.example.demo.dto.Profession;
 import com.example.demo.dto.Race;
+import com.example.demo.entity.Player;
 import com.example.demo.filter.PlayerOrder;
 import com.example.demo.service.PlayerMapper;
 import org.springframework.http.HttpStatus;
@@ -20,20 +21,20 @@ public class PlayerControllerImpl implements PlayerController {
 
     //в какую сущность это лучше засунуть не понимаю как лучше сделать
     @Override
-    public List<PlayerDto> getPlayerList(String name,
-                                         String title,
-                                         Race race,
-                                         Profession profession,
-                                         Date after,
-                                         Date before,
-                                         boolean banned,
-                                         Integer minExperience,
-                                         Integer maxExperience,
-                                         Integer minLevel,
-                                         Integer maxLevel,
-                                         PlayerOrder order,
-                                         int pageNumber,
-                                         int pageSize) {
+    public List<Player> getPlayerList(String name,
+                                      String title,
+                                      Race race,
+                                      Profession profession,
+                                      Date after,
+                                      Date before,
+                                      Boolean banned,
+                                      Integer minExperience,
+                                      Integer maxExperience,
+                                      Integer minLevel,
+                                      Integer maxLevel,
+                                      PlayerOrder order,
+                                      Integer pageNumber,
+                                      Integer pageSize) {
 
         PlayerFilter playerFilter = PlayerMapper.mapToPlayerFilter(
                 name, title, race, profession, after, before, banned, minExperience,
@@ -50,18 +51,18 @@ public class PlayerControllerImpl implements PlayerController {
     }
 
     @Override
-    public ResponseEntity<PlayerDto> getPlayerById(int id) {
+    public ResponseEntity<PlayerDto> getPlayerById(long id) {
         return null;
     }
 
     @Override
-    public ResponseEntity<PlayerDto> updatePlayerById(int id, UpdatePlayerRequest updatePlayerRequest) {
-        PlayerDto playerDto = PlayerMapper.mapToPlayerDto(updatePlayerRequest);
+    public ResponseEntity<PlayerDto> updatePlayerById(long id, UpdatePlayerRequest updatePlayerRequest) {
+        PlayerDto playerDto = PlayerMapper.mapToPlayerDto(updatePlayerRequest, id);
         return null;
     }
 
     @Override
-    public ResponseEntity<HttpStatus> deletePlayerById(int id) {
+    public ResponseEntity<HttpStatus> deletePlayerById(long id) {
         return null;
     }
 }

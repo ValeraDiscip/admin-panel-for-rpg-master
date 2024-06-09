@@ -20,4 +20,3 @@ public class Player {
     private Integer level;
     private Integer untilNextLevel;
 }
-

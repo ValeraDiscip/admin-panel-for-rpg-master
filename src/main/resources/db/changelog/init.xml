@@ -1,0 +1,274 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="task1-create-table-race" author="Valera">
+        <preConditions>
+            <not>
+                <tableExists tableName="race"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE race
+            (
+                id   SERIAL PRIMARY KEY NOT NULL,
+                name VARCHAR(20)        NOT NULL
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-HUMAN-into-race" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM race
+                WHERE name = 'HUMAN'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO race (name)
+            values ('HUMAN')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-DWARF-into-race" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM race
+                WHERE name = 'DWARF'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO race (name)
+            values ('DWARF')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-ELF-into-race" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM race
+                WHERE name = 'ELF'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO race (name)
+            values ('ELF')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-GIANT-into-race" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM race
+                WHERE name = 'GIANT'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO race (name)
+            values ('GIANT')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-ORC-into-race" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM race
+                WHERE name = 'ORC'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO race (name)
+            values ('ORC')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-TROLL-into-race" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM race
+                WHERE name = 'TROLL'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO race (name)
+            values ('TROLL')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-HOBBIT-into-race" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM race
+                WHERE name = 'HOBBIT'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO race (name)
+            values ('HOBBIT')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-create-table-profession" author="Valera">
+        <preConditions>
+            <not>
+                <tableExists tableName="profession"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE profession
+            (
+                id   SERIAL PRIMARY KEY NOT NULL,
+                name VARCHAR(20)        NOT NULL
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-WARRIOR-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'WARRIOR'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO profession (name)
+            values ('WARRIOR')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-ROGUE-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'ROGUE'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO profession (name)
+            values ('ROGUE')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-SORCERER-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'SORCERER'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO profession (name)
+            values ('SORCERER')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-CLERIC-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'CLERIC'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO profession (name)
+            values ('CLERIC')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-PALADIN-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'PALADIN'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO profession (name)
+            values ('PALADIN')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-NAZGUL-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'NAZGUL'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO profession (name)
+            values ('NAZGUL')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-WARLOCK-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'WARLOCK'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO profession (name)
+            values ('WARLOCK')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-insert-DRUID-into-profession" author="Valera">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(name)
+                FROM profession
+                WHERE name = 'DRUID'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO profession (name)
+            values ('DRUID')
+        </sql>
+    </changeSet>
+
+    <changeSet id="task1-create-table-player" author="Valera">
+        <preConditions>
+            <and>
+                <not>
+                    <tableExists tableName="player"/>
+                </not>
+                <tableExists tableName="race"/>
+                <tableExists tableName="profession"/>
+            </and>
+        </preConditions>
+        <sql>
+            CREATE TABLE player
+            (
+                id             BIGSERIAL PRIMARY KEY          NOT NULL,
+                name           VARCHAR(12)                    NOT NULL,
+                title          VARCHAR(30)                    NOT NULL,
+                race_id        INT REFERENCES race (id)       NOT NULL,
+                profession_id  INT REFERENCES profession (id) NOT NULL,
+                birthday       DATE                           NOT NULL,
+                banned         BOOLEAN                        NOT NULL,
+                experience     INT                            NOT NULL,
+                level          INT                            NOT NULL,
+                untilNextLevel INT                            NOT NULL
+            )
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
