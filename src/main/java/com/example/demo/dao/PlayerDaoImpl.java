@@ -25,8 +25,6 @@ import java.util.Map;
 public class PlayerDaoImpl implements PlayerDao {
     private final JdbcTemplate jdbcTemplate;
 
-    //задать вопрос оп страницам мне кажется по умолчанию pagenumber должен быть 1 - так будет правильнее
-    //а если вообще никакие данные на вход не пришли или такого не будет все будет там настроено во фронте?
     @Override
     public List<Player> getWithFilter(PlayerFilter playerFilter) {
         StringBuilder sql = new StringBuilder("SELECT player.id, player.name, title, " +
@@ -38,7 +36,7 @@ public class PlayerDaoImpl implements PlayerDao {
 
         ArrayList<String> clauses = new ArrayList<>();
 
-        Integer offSet = playerFilter.getPageNumber() * playerFilter.getPageSize() - playerFilter.getPageSize();
+        Integer offSet = playerFilter.getPageNumber() * playerFilter.getPageSize();
 
         if (playerFilter.getName() != null) {
             clauses.add("player.name LIKE ?");
@@ -84,6 +82,7 @@ public class PlayerDaoImpl implements PlayerDao {
             clauses.add("banned = ?");
             params.add(playerFilter.getBanned());
         }
+
         if (!clauses.isEmpty()) {
             sql.append(" WHERE ");
             String clausesString = String.join(" and ", clauses);

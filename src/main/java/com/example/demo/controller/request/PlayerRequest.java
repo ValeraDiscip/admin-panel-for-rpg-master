@@ -5,15 +5,12 @@ import com.example.demo.dto.Race;
 import com.example.demo.validation.YearRange;
 import lombok.Data;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Data
 public class PlayerRequest {
+
     @NotBlank(message = "Name can not be null or empty.")
     @Size(max = 12, message = "Name can not be more than 12 chars")
     private String name;
@@ -32,3 +29,4 @@ public class PlayerRequest {
     @Max(value = 10_000_000, message = "Experience can not be more than 10_000_000")
     private int experience;
 }
+
