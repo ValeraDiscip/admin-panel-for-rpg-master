@@ -6,11 +6,13 @@ import com.example.demo.controller.response.PlayerResponse;
 import com.example.demo.dto.Profession;
 import com.example.demo.dto.Race;
 import com.example.demo.filter.PlayerOrder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Date;
 import java.util.List;
 
@@ -39,11 +41,11 @@ public interface PlayerController {
     PlayerResponse createNewPlayer(@Valid @RequestBody PlayerRequest createPlayerRequest);
 
     @GetMapping("/{id}")
-    PlayerResponse getPlayerById(@PathVariable long id);
+    ResponseEntity<PlayerResponse> getPlayerById(@PositiveOrZero @PathVariable long id);
 
     @PostMapping("/{id}")
-    PlayerResponse updatePlayerById(@PathVariable long id, @RequestBody UpdatePlayerRequest updatePlayerRequest);
+    ResponseEntity<PlayerResponse> updatePlayerById(@PositiveOrZero @PathVariable long id, @RequestBody UpdatePlayerRequest updatePlayerRequest);
 
     @DeleteMapping("/{id}")
-    ResponseEntity<PlayerResponse> deletePlayerById(@PathVariable long id);
+    ResponseEntity<HttpStatus> deletePlayerById(@PositiveOrZero @PathVariable long id);
 }

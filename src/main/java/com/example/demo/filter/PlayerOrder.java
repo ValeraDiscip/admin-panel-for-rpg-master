@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum PlayerOrder {
-
     ID("id"), // default
     NAME("name"),
     EXPERIENCE("experience"),
@@ -16,5 +15,4 @@ public enum PlayerOrder {
     PlayerOrder(String fieldName) {
         this.fieldName = fieldName;
     }
-
 }

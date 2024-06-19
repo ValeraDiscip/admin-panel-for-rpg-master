@@ -96,7 +96,7 @@ public class PlayerDaoImpl implements PlayerDao {
         try {
             return jdbcTemplate.query(sql.toString(), new PlayerMapper(), params.toArray());
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            return new ArrayList<>();
         }
     }
 
