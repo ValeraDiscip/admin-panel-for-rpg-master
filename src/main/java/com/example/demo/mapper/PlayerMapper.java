@@ -1,7 +1,8 @@
-package com.example.demo.service;
+package com.example.demo.mapper;
 
 import com.example.demo.controller.request.PlayerRequest;
 import com.example.demo.controller.request.UpdatePlayerRequest;
+import com.example.demo.controller.response.PlayerResponse;
 import com.example.demo.dto.PlayerDto;
 import com.example.demo.dto.PlayerFilter;
 import com.example.demo.dto.Profession;
@@ -24,6 +25,7 @@ public class PlayerMapper {
                 .experience(playerRequest.getExperience())
                 .build();
     }
+
 
     public static PlayerDto mapToPlayerDto(UpdatePlayerRequest updatePlayerRequest, long id) {
         return PlayerDto.builder()
@@ -62,9 +64,22 @@ public class PlayerMapper {
                 .build();
     }
 
+
+    public static PlayerDto mapToPlayerDto(Player player) {
+        return PlayerDto.builder()
+                .id(player.getId())
+                .name(player.getName())
+                .title(player.getTitle())
+                .race(player.getRace())
+                .profession(player.getProfession())
+                .birthday(player.getBirthday())
+                .experience(player.getExperience())
+                .level(player.getLevel())
+                .untilNextLevel(player.getUntilNextLevel())
+                .build();
+    }
+
     public static Player mapToPlayer(PlayerDto playerDto) {
-        int level = (int) ((Math.sqrt(2500 + 200 * playerDto.getExperience()) - 50) / 100);
-        int untilNextLevel = 50 * (level + 1) * (level + 2) - playerDto.getExperience();
 
         return Player.builder()
                 .id(playerDto.getId())
@@ -75,8 +90,22 @@ public class PlayerMapper {
                 .birthday(playerDto.getBirthday())
                 .banned(playerDto.getBanned())
                 .experience(playerDto.getExperience())
-                .level(level)
-                .untilNextLevel(untilNextLevel)
+                .level(playerDto.getLevel())
+                .untilNextLevel(playerDto.getUntilNextLevel())
+                .build();
+    }
+
+    public static PlayerResponse mapToPlayerResponse(PlayerDto playerDto) {
+        return PlayerResponse.builder()
+                .id(playerDto.getId())
+                .name(playerDto.getName())
+                .title(playerDto.getTitle())
+                .race(playerDto.getRace())
+                .profession(playerDto.getProfession())
+                .birthday(playerDto.getBirthday().getTime())
+                .experience(playerDto.getExperience())
+                .level(playerDto.getLevel())
+                .untilNextLevel(playerDto.getUntilNextLevel())
                 .build();
     }
 }

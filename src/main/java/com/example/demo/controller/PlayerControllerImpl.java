@@ -1,14 +1,16 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.PlayerDto;
-import com.example.demo.dto.PlayerFilter;
 import com.example.demo.controller.request.PlayerRequest;
 import com.example.demo.controller.request.UpdatePlayerRequest;
+import com.example.demo.controller.response.PlayerResponse;
+import com.example.demo.dto.PlayerDto;
+import com.example.demo.dto.PlayerFilter;
 import com.example.demo.dto.Profession;
 import com.example.demo.dto.Race;
-import com.example.demo.entity.Player;
 import com.example.demo.filter.PlayerOrder;
-import com.example.demo.service.PlayerMapper;
+import com.example.demo.mapper.PlayerMapper;
+import com.example.demo.service.PlayerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,52 +19,86 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class PlayerControllerImpl implements PlayerController {
+    private final PlayerService crudPlayerService;
 
-    //в какую сущность это лучше засунуть не понимаю как лучше сделать
     @Override
-    public List<Player> getPlayerList(String name,
-                                      String title,
-                                      Race race,
-                                      Profession profession,
-                                      Date after,
-                                      Date before,
-                                      Boolean banned,
-                                      Integer minExperience,
-                                      Integer maxExperience,
-                                      Integer minLevel,
-                                      Integer maxLevel,
-                                      PlayerOrder order,
-                                      Integer pageNumber,
-                                      Integer pageSize) {
+    public List<PlayerResponse> getPlayerList(String name,
+                                              String title,
+                                              Race race,
+                                              Profession profession,
+                                              Date after,
+                                              Date before,
+                                              Boolean banned,
+                                              Integer minExperience,
+                                              Integer maxExperience,
+                                              Integer minLevel,
+                                              Integer maxLevel,
+                                              PlayerOrder order,
+                                              Integer pageNumber,
+                                              Integer pageSize) {
 
         PlayerFilter playerFilter = PlayerMapper.mapToPlayerFilter(
                 name, title, race, profession, after, before, banned, minExperience,
                 maxExperience, minLevel, maxLevel, order, pageNumber, pageSize);
-        //далее это передается в сервис...
-        System.out.println(playerFilter);
-        return null;
+
+        List<PlayerDto> foundPlayerList = crudPlayerService.getWithFilter(playerFilter);
+
+        return foundPlayerList.stream()
+                .map(PlayerMapper::mapToPlayerResponse)
+                .toList();
     }
 
     @Override
-    public PlayerDto createNewPlayer(PlayerRequest createPlayerRequest) {
-        PlayerDto playerDto = PlayerMapper.mapToPlayerDto(createPlayerRequest);
-        return playerDto;
+    public Integer getPlayerCount(String name,
+                                  String title,
+                                  Race race,
+                                  Profession profession,
+                                  Date after,
+                                  Date before,
+                                  Boolean banned,
+                                  Integer minExperience,
+                                  Integer maxExperience,
+                                  Integer minLevel,
+                                  Integer maxLevel) {
+        PlayerFilter playerFilter = PlayerMapper.mapToPlayerFilter(name, title, race, profession, after, before, banned, minExperience,
+                maxExperience, minLevel, maxLevel, null, null, null);
+        return crudPlayerService.getCount(playerFilter);
     }
 
     @Override
-    public ResponseEntity<PlayerDto> getPlayerById(long id) {
-        return null;
+    public PlayerResponse createNewPlayer(PlayerRequest createPlayerRequest) {
+        PlayerDto playerForCreate = PlayerMapper.mapToPlayerDto(createPlayerRequest);
+        PlayerDto createdPlayer = crudPlayerService.create(playerForCreate);
+        return PlayerMapper.mapToPlayerResponse(createdPlayer);
     }
 
     @Override
-    public ResponseEntity<PlayerDto> updatePlayerById(long id, UpdatePlayerRequest updatePlayerRequest) {
-        PlayerDto playerDto = PlayerMapper.mapToPlayerDto(updatePlayerRequest, id);
-        return null;
+    public ResponseEntity<PlayerResponse> getPlayerById(long id) {
+        PlayerDto foundPlayer = crudPlayerService.getById(id);
+        if (foundPlayer == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(PlayerMapper.mapToPlayerResponse(foundPlayer));
+    }
+
+    @Override
+    public ResponseEntity<PlayerResponse> updatePlayerById(long id, UpdatePlayerRequest updatePlayerRequest) {
+        PlayerDto playerForUpdate = PlayerMapper.mapToPlayerDto(updatePlayerRequest, id);
+        PlayerDto updatedPlayer = crudPlayerService.update(playerForUpdate);
+        if (updatedPlayer == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(PlayerMapper.mapToPlayerResponse(updatedPlayer));
     }
 
     @Override
     public ResponseEntity<HttpStatus> deletePlayerById(long id) {
-        return null;
+        PlayerDto deletedPlayer = crudPlayerService.delete(id);
+        if (deletedPlayer == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
