@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface PlayerDao {
     List<Player> getWithFilter(PlayerFilter playerFilter);
+    Integer getCount(PlayerFilter playerFilter);
     Player create(Player player);
     Player getById(long id);
     Player update(Player player);

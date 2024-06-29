@@ -102,7 +102,7 @@ public class PlayerMapper {
                 .title(playerDto.getTitle())
                 .race(playerDto.getRace())
                 .profession(playerDto.getProfession())
-                .birthday(playerDto.getBirthday())
+                .birthday(playerDto.getBirthday().getTime())
                 .experience(playerDto.getExperience())
                 .level(playerDto.getLevel())
                 .untilNextLevel(playerDto.getUntilNextLevel())

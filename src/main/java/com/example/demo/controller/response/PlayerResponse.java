@@ -4,8 +4,6 @@ import com.example.demo.dto.Profession;
 import com.example.demo.dto.Race;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.Date;
 @Data
 @Builder
 public class PlayerResponse {
@@ -14,7 +12,7 @@ public class PlayerResponse {
     private String title;
     private Race race;
     private Profession profession;
-    private Date birthday;
+    private Long birthday;
     private boolean banned;
     private int experience;
     private int level;

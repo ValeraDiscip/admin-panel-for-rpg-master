@@ -51,6 +51,23 @@ public class PlayerControllerImpl implements PlayerController {
     }
 
     @Override
+    public Integer getPlayerCount(String name,
+                                  String title,
+                                  Race race,
+                                  Profession profession,
+                                  Date after,
+                                  Date before,
+                                  Boolean banned,
+                                  Integer minExperience,
+                                  Integer maxExperience,
+                                  Integer minLevel,
+                                  Integer maxLevel) {
+        PlayerFilter playerFilter = PlayerMapper.mapToPlayerFilter(name, title, race, profession, after, before, banned, minExperience,
+                maxExperience, minLevel, maxLevel, null, null, null);
+        return crudPlayerService.getCount(playerFilter);
+    }
+
+    @Override
     public PlayerResponse createNewPlayer(PlayerRequest createPlayerRequest) {
         PlayerDto playerForCreate = PlayerMapper.mapToPlayerDto(createPlayerRequest);
         PlayerDto createdPlayer = crudPlayerService.create(playerForCreate);

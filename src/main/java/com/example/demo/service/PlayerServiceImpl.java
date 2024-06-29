@@ -27,6 +27,11 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    public Integer getCount(PlayerFilter playerFilter) {
+        return playerDao.getCount(playerFilter);
+    }
+
+    @Override
     public PlayerDto create(PlayerDto player) {
         int level = (int) ((Math.sqrt(2500 + 200 * player.getExperience()) - 50) / 100);
         int untilNextLevel = 50 * (level + 1) * (level + 2) - player.getExperience();
@@ -43,7 +48,6 @@ public class PlayerServiceImpl implements PlayerService {
         if (foundPlayer == null) {
             return null;
         }
-        log.info("Found player with id [{}].", id);
         return PlayerMapper.mapToPlayerDto(foundPlayer);
     }
 
