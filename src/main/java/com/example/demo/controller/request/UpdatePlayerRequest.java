@@ -28,7 +28,7 @@ public class UpdatePlayerRequest {
     @YearRange(message = "Birthday must be from 2000 to 3000 (included)", startYear = 2000, endYear = 3000)
     private Date birthday;
 
-    private Boolean banned = false;
+    private Boolean banned;
 
     @PositiveOrZero(message = "Experience must be positive or zero.")
     @Max(value = 10_000_000, message = "Experience can not be more than 10_000_000")

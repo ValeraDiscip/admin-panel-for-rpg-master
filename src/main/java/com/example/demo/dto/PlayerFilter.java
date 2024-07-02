@@ -1,13 +1,11 @@
 package com.example.demo.dto;
 
 import com.example.demo.filter.PlayerOrder;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-@Builder
 public class PlayerFilter {
     private String name;
     private String title;
@@ -20,7 +18,7 @@ public class PlayerFilter {
     private Integer maxExperience;
     private Integer minLevel;
     private Integer maxLevel;
-    private PlayerOrder order;
-    private Integer pageNumber;
-    private Integer pageSize;
+    private PlayerOrder order = PlayerOrder.ID;
+    private Integer pageNumber = 0;
+    private Integer pageSize = 3;
 }
