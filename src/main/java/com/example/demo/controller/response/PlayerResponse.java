@@ -13,7 +13,7 @@ public class PlayerResponse {
     private Race race;
     private Profession profession;
     private Long birthday;
-    private boolean banned;
+    private Boolean banned;
     private int experience;
     private int level;
     private int untilNextLevel;

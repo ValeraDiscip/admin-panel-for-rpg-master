@@ -2,50 +2,42 @@ package com.example.demo.dao;
 
 import com.example.demo.dto.PlayerFilter;
 import com.example.demo.entity.Player;
-import liquibase.pro.packaged.L;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 public class PlayerDaoImpl implements PlayerDao {
     private final JdbcTemplate jdbcTemplate;
 
-    private String selectQuery = "SELECT player.id, player.name, title, race.name as race_name, " +
-            "profession.name as profession_name, birthday, banned, experience, level, untilNextLevel FROM player" +
-            " JOIN race ON player.race_id = race.id JOIN profession ON player.profession_id = profession.id";
-
     @Override
     public List<Player> getWithFilter(PlayerFilter playerFilter) {
-        StringBuilder sql = new StringBuilder(selectQuery);
+        SqlSelectBuilder sqlSelectBuilder = getBaseSqlSelectBuilderFromPlayerFilter(playerFilter);
 
-        List<Object> params = new ArrayList<>();
+        List<String> columns = new ArrayList<>(Arrays.asList("player.id", "player.name", "title", "race.name as race_name",
+                "profession.name as profession_name", "birthday", "banned", "experience", "level", "untilNextLevel"));
 
-        checkPlayerFilterToFormRequest(playerFilter, sql, params);
+        List<String> joinTables = new ArrayList<>(Arrays.asList("race ON player.race_id = race.id", "profession ON player.profession_id = profession.id"));
 
-        Integer offSet = playerFilter.getPageNumber() * playerFilter.getPageSize();
+        List<String> modifiers = new ArrayList<>(Arrays.asList(
+                "ORDER BY " + playerFilter.getOrder(),
+                "LIMIT " + playerFilter.getPageSize(),
+                "OFFSET " + playerFilter.getPageNumber() * playerFilter.getPageSize()));
 
-        sql.append(" ORDER BY " + playerFilter.getOrder());
-        sql.append(" LIMIT " + playerFilter.getPageSize());
-        sql.append(" OFFSET " + offSet);
+        SqlSelectBuilder.SqlSelectBuilderResult result = sqlSelectBuilder.build();
 
         try {
-            return jdbcTemplate.query(sql.toString(), new PlayerMapper(), params.toArray());
+            return jdbcTemplate.query(result.getSql(), new PlayerMapper(), result.getValues());
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
@@ -53,14 +45,21 @@ public class PlayerDaoImpl implements PlayerDao {
 
     @Override
     public Integer getCount(PlayerFilter playerFilter) {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM player");
+        List<String> columns = new ArrayList<>(Arrays.asList("COUNT(*)"));
 
-        List<Object> params = new ArrayList<>();
+        List<String> joinTables = new ArrayList<>();
 
-        checkPlayerFilterToFormRequest(playerFilter, sql, params);
+        if (playerFilter.getRace() != null) {
+            joinTables.add("race ON player.race_id = race.id");
+        }
+        if (playerFilter.getProfession() != null) {
+            joinTables.add("profession ON player.profession_id = profession.id");
+        }
+
+        SelectSqlRequest selectSqlRequest = getBaseSqlSelectBuilderFromPlayerFilter(playerFilter, columns, joinTables, "player", null);
 
         try {
-            return jdbcTemplate.queryForObject(sql.toString(), Integer.class, params.toArray());
+            return jdbcTemplate.queryForObject(selectSqlRequest.getSql(), Integer.class, selectSqlRequest.getValues().toArray());
         } catch (EmptyResultDataAccessException e) {
             return 0;
         }
@@ -88,15 +87,22 @@ public class PlayerDaoImpl implements PlayerDao {
             ps.setInt(9, player.getUntilNextLevel());
             return ps;
         }, keyHolder);
+        //написано что может быть nullpointerexception что делать в таком случае отлавливать и что вернуть? как будет правильнее
 
         return getById((Long) keyHolder.getKey());
     }
 
     @Override
     public Player getById(long id) {
-        StringBuilder sql = new StringBuilder(selectQuery).append(" WHERE player.id = ? ");
+        List<String> columns = new ArrayList<>(Arrays.asList("player.id", "player.name", "title", "race.name as race_name",
+                "profession.name as profession_name", "birthday", "banned", "experience", "level", "untilNextLevel"));
+
+        List<String> joinTables = new ArrayList<>(Arrays.asList("race ON player.race_id = race.id", "profession ON player.profession_id = profession.id"));
+
+        String sql = SelectSqlRequest.builder().columns(columns).mainTable("player").joinTables(joinTables)
+                .conditions(new ArrayList<>(Arrays.asList("player.id = ?"))).build().getSql();
         try {
-            return jdbcTemplate.queryForObject(sql.toString(), new PlayerMapper(), id);
+            return jdbcTemplate.queryForObject(sql, new PlayerMapper(), id);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
@@ -148,65 +154,54 @@ public class PlayerDaoImpl implements PlayerDao {
         return playerForDelete;
     }
 
-    private void checkPlayerFilterToFormRequest(PlayerFilter playerFilter, StringBuilder sql, List<Object> params) {
-
-        ArrayList<String> clauses = new ArrayList<>();
+    //НЕ ЗАБЫТЬ ПРЕДЛОЖИТЬ ИДЕЮ ПО ИЗМЕНЕНИЮ ЭТОГО МЕТОДА ТАК КАК ЕГО ЗАДАЧА ВСЕ ЖЕ НЕ В ПОСТРОЕНИИ ЗАПРОСА А В ФОРМИРОВАНИИ УСЛОВИЙ И ЗНАЧЕНИЙ
+    private SqlSelectBuilder getBaseSqlSelectBuilderFromPlayerFilter(PlayerFilter playerFilter) {
+        SqlSelectBuilder sqlSelectBuilder = new SqlSelectBuilder();
 
         if (playerFilter.getName() != null) {
-            clauses.add("player.name LIKE ?");
-            params.add("%" + playerFilter.getName() + "%");
+            sqlSelectBuilder.condition("player.name LIKE ?");
+            //values.add("%" + playerFilter.getName() + "%");
         }
-        if (playerFilter.getTitle() != null) {
-            clauses.add("title LIKE ?");
-            params.add("%" + playerFilter.getTitle() + "%");
-        }
-        if (playerFilter.getRace() != null) {
-            clauses.add("race.name = ?");
-            params.add(playerFilter.getRace().name());
-            if (playerFilter.getOrder() == null) {
-                sql.append(" JOIN race ON player.race_id = race.id ");
-            }
-        }
-        if (playerFilter.getProfession() != null) {
-            clauses.add("profession.name = ?");
-            params.add(playerFilter.getProfession().name());
-            if (playerFilter.getOrder() == null) {
-                sql.append(" JOIN profession ON player.profession_id = profession.id ");
-            }
-        }
-        if (playerFilter.getAfter() != null) {
-            clauses.add("birthday > ?");
-            params.add(playerFilter.getAfter());
-        }
-        if (playerFilter.getBefore() != null) {
-            clauses.add("birthday < ?");
-            params.add(playerFilter.getBefore());
-        }
-        if (playerFilter.getMinExperience() != null) {
-            clauses.add("experience >= ?");
-            params.add(playerFilter.getMinExperience());
-        }
-        if (playerFilter.getMaxExperience() != null) {
-            clauses.add("experience <= ?");
-            params.add(playerFilter.getMaxExperience());
-        }
-        if (playerFilter.getMinLevel() != null) {
-            clauses.add("level >= ?");
-            params.add(playerFilter.getMinLevel());
-        }
-        if (playerFilter.getMaxLevel() != null) {
-            clauses.add("level <= ?");
-            params.add(playerFilter.getMaxLevel());
-        }
-        if (playerFilter.getBanned() != null) {
-            clauses.add("banned = ?");
-            params.add(playerFilter.getBanned());
-        }
-
-        if (!clauses.isEmpty()) {
-            sql.append(" WHERE ");
-            String clausesString = String.join(" and ", clauses);
-            sql.append(clausesString);
-        }
+//        if (playerFilter.getTitle() != null) {
+//            conditions.add("title LIKE ?");
+//            values.add("%" + playerFilter.getTitle() + "%");
+//        }
+//        if (playerFilter.getRace() != null) {
+//            conditions.add("race.name = ?");
+//            values.add(playerFilter.getRace().name());
+//        }
+//        if (playerFilter.getProfession() != null) {
+//            conditions.add("profession.name = ?");
+//            values.add(playerFilter.getProfession().name());
+//        }
+//        if (playerFilter.getAfter() != null) {
+//            conditions.add("birthday > ?");
+//            values.add(playerFilter.getAfter());
+//        }
+//        if (playerFilter.getBefore() != null) {
+//            conditions.add("birthday < ?");
+//            values.add(playerFilter.getBefore());
+//        }
+//        if (playerFilter.getMinExperience() != null) {
+//            conditions.add("experience >= ?");
+//            values.add(playerFilter.getMinExperience());
+//        }
+//        if (playerFilter.getMaxExperience() != null) {
+//            conditions.add("experience <= ?");
+//            values.add(playerFilter.getMaxExperience());
+//        }
+//        if (playerFilter.getMinLevel() != null) {
+//            conditions.add("level >= ?");
+//            values.add(playerFilter.getMinLevel());
+//        }
+//        if (playerFilter.getMaxLevel() != null) {
+//            conditions.add("level <= ?");
+//            values.add(playerFilter.getMaxLevel());
+//        }
+//        if (playerFilter.getBanned() != null) {
+//            conditions.add("banned = ?");
+//            values.add(playerFilter.getBanned());
+//        }
+        return sqlSelectBuilder;
     }
 }

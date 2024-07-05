@@ -1,6 +1,6 @@
 package com.example.demo.mapper;
 
-import com.example.demo.controller.request.PlayerRequest;
+import com.example.demo.controller.request.CreatePlayerRequest;
 import com.example.demo.controller.request.UpdatePlayerRequest;
 import com.example.demo.controller.response.PlayerResponse;
 import com.example.demo.dto.PlayerDto;
@@ -8,7 +8,7 @@ import com.example.demo.entity.Player;
 
 public class PlayerMapper {
 
-    public static PlayerDto mapToPlayerDto(PlayerRequest playerRequest) {
+    public static PlayerDto mapToPlayerDto(CreatePlayerRequest playerRequest) {
         return PlayerDto.builder()
                 .name(playerRequest.getName())
                 .title(playerRequest.getTitle())
@@ -41,6 +41,7 @@ public class PlayerMapper {
                 .race(player.getRace())
                 .profession(player.getProfession())
                 .birthday(player.getBirthday())
+                .banned(player.getBanned())
                 .experience(player.getExperience())
                 .level(player.getLevel())
                 .untilNextLevel(player.getUntilNextLevel())
@@ -71,6 +72,7 @@ public class PlayerMapper {
                 .race(playerDto.getRace())
                 .profession(playerDto.getProfession())
                 .birthday(playerDto.getBirthday().getTime())
+                .banned(playerDto.getBanned())
                 .experience(playerDto.getExperience())
                 .level(playerDto.getLevel())
                 .untilNextLevel(playerDto.getUntilNextLevel())

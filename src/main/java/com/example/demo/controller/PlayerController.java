@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.controller.request.PlayerRequest;
+import com.example.demo.controller.request.CreatePlayerRequest;
 import com.example.demo.controller.request.UpdatePlayerRequest;
 import com.example.demo.controller.response.PlayerResponse;
 import com.example.demo.dto.PlayerFilter;
@@ -23,9 +23,8 @@ public interface PlayerController {
     @GetMapping("/count")
     Integer getPlayerCount(PlayerFilter playerFilter);
 
-
     @PostMapping
-    PlayerResponse createNewPlayer(@Valid @RequestBody PlayerRequest createPlayerRequest);
+    PlayerResponse createNewPlayer(@Valid @RequestBody CreatePlayerRequest createPlayerRequest);
 
     @GetMapping("/{id}")
     ResponseEntity<PlayerResponse> getPlayerById(@PositiveOrZero @PathVariable long id);

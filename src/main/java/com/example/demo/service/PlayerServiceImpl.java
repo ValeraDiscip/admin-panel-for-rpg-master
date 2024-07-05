@@ -4,15 +4,12 @@ import com.example.demo.dao.PlayerDao;
 import com.example.demo.dto.PlayerDto;
 import com.example.demo.dto.PlayerFilter;
 import com.example.demo.entity.Player;
-import com.example.demo.filter.PlayerOrder;
 import com.example.demo.mapper.PlayerMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PlayerServiceImpl implements PlayerService {

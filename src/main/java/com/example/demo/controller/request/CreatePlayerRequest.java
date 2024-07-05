@@ -3,18 +3,17 @@ package com.example.demo.controller.request;
 import com.example.demo.dto.Profession;
 import com.example.demo.dto.Race;
 import com.example.demo.validation.YearRange;
-import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Max;
+import javax.validation.constraints.Size;
 import java.util.Date;
-@Builder
+
 @Data
-public class PlayerRequest {
+public class CreatePlayerRequest {
     @NotBlank(message = "Name can not be null or empty.")
     @Size(max = 12, message = "Name can not be more than 12 chars")
     private String name;

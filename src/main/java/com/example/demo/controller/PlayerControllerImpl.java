@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.controller.request.PlayerRequest;
+import com.example.demo.controller.request.CreatePlayerRequest;
 import com.example.demo.controller.request.UpdatePlayerRequest;
 import com.example.demo.controller.response.PlayerResponse;
 import com.example.demo.dto.PlayerDto;
@@ -35,7 +35,7 @@ public class PlayerControllerImpl implements PlayerController {
     }
 
     @Override
-    public PlayerResponse createNewPlayer(PlayerRequest createPlayerRequest) {
+    public PlayerResponse createNewPlayer(CreatePlayerRequest createPlayerRequest) {
         PlayerDto playerForCreate = PlayerMapper.mapToPlayerDto(createPlayerRequest);
         PlayerDto createdPlayer = crudPlayerService.create(playerForCreate);
         return PlayerMapper.mapToPlayerResponse(createdPlayer);

@@ -56,14 +56,14 @@ CREATE TABLE player
     untilNextLevel INT                            NOT NULL
 );
 
-INSERT INTO player (id, name, title, race_id, profession_id, birthday, banned, experience, level, untilNextLevel)
-values (1, 'nameTest1', 'titleTest1', 2, 4, '2020-01-01', true, 0, 0, 100),
-       (2, 'nameTest2', 'titleTest2', 2, 4, '2020-01-01', true, 0, 0, 100),
-       (3, 'nameTest', 'title', 2, 4, '2021-02-27', true, 4000, 8, 500),
-       (4, 'name', 'Test', 3, 2, '2013-11-11', false, 600111, 109, 10389),
-       (5, 'nameTest3', 'titleTest3', 2, 4, '2020-01-01', true, 0, 0, 100),
-       (6, 'name', 'title', 3, 4, '2010-11-11', true, 600111, 109, 10389),
-       (7, 'name', 'Test', 3, 4, '2009-11-11', false, 600111, 109, 10389);
+INSERT INTO player (name, title, race_id, profession_id, birthday, banned, experience, level, untilNextLevel)
+values ('firstTest', 'firstTest', 1, 5, '2020-07-01', true, 0, 0, 100),
+       ('secondTest', 'secondTest', 1, 5, '2020-07-01', true, 0, 0, 100),
+       ('findById', 'Test', 2, 4, '2021-02-27', false, 4000, 8, 500),
+       ('Mr X', 'Your fearrrr', 3, 2, '2013-11-11', false, 600111, 109, 10389),
+       ('thirdTest', 'thirdTest', 1, 5, '2020-07-01', true, 0, 0, 100),
+       ('Nothing', 'hey', 3, 4, '2010-11-11', true, 600111, 109, 10389),
+       ('someName', 'title', 3, 4, '2009-11-11', false, 600111, 109, 10389);
 
 
 
