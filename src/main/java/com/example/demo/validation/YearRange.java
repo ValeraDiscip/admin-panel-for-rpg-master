@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Constraint(validatedBy = YearRangeValidator.class)
 public @interface YearRange {
-    String message() default "{Date must be between {min} and {max}";
+    String message();
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 

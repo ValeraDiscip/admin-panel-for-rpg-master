@@ -4,10 +4,13 @@ import com.example.demo.dto.Profession;
 import com.example.demo.dto.Race;
 import com.example.demo.entity.Player;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+//Поменять название и кинуть в папку mapper СПРОСИТЬ
+@Component
 public class PlayerMapper implements RowMapper<Player> {
     @Override
     public Player mapRow(ResultSet resultSet, int rowNum) throws SQLException {
