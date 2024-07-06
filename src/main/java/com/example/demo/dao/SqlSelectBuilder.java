@@ -1,12 +1,12 @@
 package com.example.demo.dao;
 
-import liquibase.pro.packaged.S;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//ЗАДАТЬ ВОПРОС В КАКУЮ ЛУЧШЕ ПАПКУ ТАКОЕ КЛАСТЬ BUILDER?
 
 public class SqlSelectBuilder {
     private final List<String> columns;
@@ -65,20 +65,34 @@ public class SqlSelectBuilder {
 
         return request.toString();
     }
-
-    public SqlSelectBuilder column(String ...column) {
+//  МЕТОДЫ ЛУЧШЕ ВО МНОЖЕСТВЕННОМ ЧИСЛЕ НАЗЫВАТЬ В ТАКОМ СЛУЧАЕ ИЛИ В ЕДИНСТВЕННОМ
+    public void columns(String... column) {
         columns.addAll(List.of(column));
-        return this;
     }
 
-    public SqlSelectBuilder condition(String ...condition) {
+    public void conditions(String... condition) {
         conditions.addAll(List.of(condition));
-        return this;
+    }
+
+    public void joinTables(String... joinTables) {
+        this.joinTables.addAll(List.of(joinTables));
+    }
+
+    public void mainTable(String mainTable) {
+        this.mainTable = mainTable;
+    }
+
+    public void modifiers(String... modifiers) {
+        this.modifiers.addAll(List.of(modifiers));
+    }
+
+    public void values(Object... values) {
+        this.values.addAll(List.of(values));
     }
 
     private void validateParameters() {
         if (columns.isEmpty() || mainTable == null) {
-            throw new RuntimeException("You must specify at least one column or mainTable");
+            throw new RuntimeException("You must specify at least one column and mainTable");
         }
     }
 

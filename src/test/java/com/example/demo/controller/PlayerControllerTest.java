@@ -37,7 +37,7 @@ public class PlayerControllerTest {
     PlayerController playerController;
 
     @Test
-    public void getPlayerList() throws Exception {
+    public void getPlayerListTest() throws Exception {
 
         this.mockMvc.perform(get("/rest/players").param("name", "Test")
                         .param("title", "Test")
@@ -48,7 +48,7 @@ public class PlayerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$.[0].id").value(1))
+                .andExpect(jsonPath("$.[0].id").value("1"))
                 .andExpect(jsonPath("$.[0].name").value("firstTest"))
                 .andExpect(jsonPath("$.[0].title").value("firstTest"))
                 .andExpect(jsonPath("$.[0].race").value("HUMAN"))
@@ -81,7 +81,7 @@ public class PlayerControllerTest {
     }
 
     @Test
-    public void getPlayerCount() throws Exception {
+    public void getPlayerCountTest() throws Exception {
         this.mockMvc.perform(get("/rest/players/count")
                         .param("name", "Test")
                         .param("title", "Test")
@@ -95,27 +95,8 @@ public class PlayerControllerTest {
                 .andExpect(status().isOk());
     }
 
-
     @Test
-    public void getPlayerById() throws Exception {
-        this.mockMvc.perform(get("/rest/players/{id}", 3))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(3))
-                .andExpect(jsonPath("$.name").value("findById"))
-                .andExpect(jsonPath("$.title").value("Test"))
-                .andExpect(jsonPath("$.race").value("DWARF"))
-                .andExpect(jsonPath("$.profession").value("CLERIC"))
-                .andExpect(jsonPath("$.birthday").value("1614373200000"))
-                .andExpect(jsonPath("$.banned").value("false"))
-                .andExpect(jsonPath("$.experience").value("4000"))
-                .andExpect(jsonPath("$.level").value("8"))
-                .andExpect(jsonPath("$.untilNextLevel").value("500"));
-    }
-
-    @Test
-    public void createNewPlayer() throws Exception {
+    public void createPlayerTest() throws Exception {
 
         CreatePlayerRequest createPlayerRequest = createPlayerRequest();
 
@@ -138,17 +119,98 @@ public class PlayerControllerTest {
     }
 
     @Test
-    public void updatePlayer() throws Exception {
+    public void createPlayerWithNotAllParamsTest() throws Exception {
+        CreatePlayerRequest createPlayerRequest = createPlayerRequest();
+        createPlayerRequest.setRace(null);
+        createPlayerRequest.setProfession(null);
+
+        String newPlayerString = mapper.writeValueAsString(createPlayerRequest);
+
+        mockMvc.perform(post("/rest/players").contentType(APPLICATION_JSON).content(newPlayerString))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void createPlayerWithEmptyNameTest() throws Exception {
+        CreatePlayerRequest createPlayerRequest = createPlayerRequest();
+        createPlayerRequest.setName("");
+
+        String newPlayerString = mapper.writeValueAsString(createPlayerRequest);
+
+        mockMvc.perform(post("/rest/players").contentType(APPLICATION_JSON).content(newPlayerString))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void createPlayerWithTooLargeNameTest() throws Exception {
+        CreatePlayerRequest createPlayerRequest = createPlayerRequest();
+        createPlayerRequest.setName("ThisNameIsTooLongForCreating");
+
+        String newPlayerString = mapper.writeValueAsString(createPlayerRequest);
+
+        mockMvc.perform(post("/rest/players").contentType(APPLICATION_JSON).content(newPlayerString))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void createPlayerWithTooLargeTitleTest() throws Exception {
+        CreatePlayerRequest createPlayerRequest = createPlayerRequest();
+        createPlayerRequest.setTitle("ThisTitleIsTooLongForCreatingggggg");
+
+        String newPlayerString = mapper.writeValueAsString(createPlayerRequest);
+
+        mockMvc.perform(post("/rest/players").contentType(APPLICATION_JSON).content(newPlayerString))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void getPlayerByIdTest() throws Exception {
+        this.mockMvc.perform(get("/rest/players/{id}", 3))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(3))
+                .andExpect(jsonPath("$.name").value("findById"))
+                .andExpect(jsonPath("$.title").value("Test"))
+                .andExpect(jsonPath("$.race").value("DWARF"))
+                .andExpect(jsonPath("$.profession").value("CLERIC"))
+                .andExpect(jsonPath("$.birthday").value("1614373200000"))
+                .andExpect(jsonPath("$.banned").value("false"))
+                .andExpect(jsonPath("$.experience").value("4000"))
+                .andExpect(jsonPath("$.level").value("8"))
+                .andExpect(jsonPath("$.untilNextLevel").value("500"));
+    }
+
+    @Test
+    public void getNotExistedPlayerByIdTest() throws Exception {
+        this.mockMvc.perform(get("/rest/players/{id}", 555))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void getPlayerByNotValidIdTest() throws Exception {
+        this.mockMvc.perform(get("/rest/players/{id}", -1))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updatePlayerTest() throws Exception {
         CreatePlayerRequest createPlayerRequest = createPlayerRequest();
 
-       PlayerResponse playerResponse = playerController.createNewPlayer(createPlayerRequest);
-       long createdPlayerId = playerResponse.getId();
+        PlayerResponse playerResponse = playerController.createNewPlayer(createPlayerRequest);
+        long createdPlayerId = playerResponse.getId();
 
-       UpdatePlayerRequest updatePlayerRequest = new UpdatePlayerRequest();
-       updatePlayerRequest.setName("updatedName");
-       updatePlayerRequest.setRace(Race.ORC);
-       updatePlayerRequest.setProfession(Profession.CLERIC);
-       updatePlayerRequest.setBanned(true);
+        UpdatePlayerRequest updatePlayerRequest = new UpdatePlayerRequest();
+        updatePlayerRequest.setName("updatedName");
+        updatePlayerRequest.setRace(Race.ORC);
+        updatePlayerRequest.setProfession(Profession.CLERIC);
+        updatePlayerRequest.setBanned(true);
 
         mockMvc.perform(post("/rest/players/{id}", createdPlayerId)
                         .contentType(APPLICATION_JSON)
@@ -166,7 +228,37 @@ public class PlayerControllerTest {
     }
 
     @Test
-    public void deletePlayerById() throws Exception {
+    public void updateNotExistedPlayerTest() throws Exception {
+        UpdatePlayerRequest updatePlayerRequest = new UpdatePlayerRequest();
+        updatePlayerRequest.setName("updatedName");
+        updatePlayerRequest.setRace(Race.ORC);
+        updatePlayerRequest.setProfession(Profession.CLERIC);
+        updatePlayerRequest.setBanned(true);
+
+        mockMvc.perform(post("/rest/players/{id}", 7777)
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(updatePlayerRequest)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void updatePlayerByNotValidIdTest() throws Exception {
+        UpdatePlayerRequest updatePlayerRequest = new UpdatePlayerRequest();
+        updatePlayerRequest.setName("updatedName");
+        updatePlayerRequest.setRace(Race.ORC);
+        updatePlayerRequest.setProfession(Profession.CLERIC);
+        updatePlayerRequest.setBanned(true);
+
+        mockMvc.perform(post("/rest/players/{id}", -1)
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(updatePlayerRequest)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void deletePlayerTest() throws Exception {
         CreatePlayerRequest createPlayerRequest = createPlayerRequest();
 
         PlayerResponse playerResponse = playerController.createNewPlayer(createPlayerRequest);
@@ -175,6 +267,22 @@ public class PlayerControllerTest {
         mockMvc.perform(delete("/rest/players/{id}", createdPlayerId))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void deleteNotExistedPlayerTest() throws Exception {
+
+        mockMvc.perform(delete("/rest/players/{id}", 99999))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void deletePlayerByNotValidIdTest() throws Exception {
+
+        mockMvc.perform(delete("/rest/players/{id}", -1))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     private CreatePlayerRequest createPlayerRequest() {

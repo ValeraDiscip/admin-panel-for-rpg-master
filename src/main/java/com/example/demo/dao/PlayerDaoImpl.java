@@ -12,32 +12,33 @@ import org.springframework.stereotype.Component;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class PlayerDaoImpl implements PlayerDao {
     private final JdbcTemplate jdbcTemplate;
+    private final PlayerMapper playerMapper;
+    private final String mainTable = "player";
+    private final String columns = "player.id, player.name, title, race.name as race_name, profession.name as profession_name, birthday, banned, experience, level, untilNextLevel";
+    private final String joinRaceTable = "race ON player.race_id = race.id";
+    private final String joinProfessionTable = "profession ON player.profession_id = profession.id";
 
     @Override
     public List<Player> getWithFilter(PlayerFilter playerFilter) {
         SqlSelectBuilder sqlSelectBuilder = getBaseSqlSelectBuilderFromPlayerFilter(playerFilter);
 
-        List<String> columns = new ArrayList<>(Arrays.asList("player.id", "player.name", "title", "race.name as race_name",
-                "profession.name as profession_name", "birthday", "banned", "experience", "level", "untilNextLevel"));
-
-        List<String> joinTables = new ArrayList<>(Arrays.asList("race ON player.race_id = race.id", "profession ON player.profession_id = profession.id"));
-
-        List<String> modifiers = new ArrayList<>(Arrays.asList(
-                "ORDER BY " + playerFilter.getOrder(),
-                "LIMIT " + playerFilter.getPageSize(),
-                "OFFSET " + playerFilter.getPageNumber() * playerFilter.getPageSize()));
+        sqlSelectBuilder.columns(columns);
+        sqlSelectBuilder.mainTable(mainTable);
+        sqlSelectBuilder.joinTables(joinRaceTable, joinProfessionTable);
+        sqlSelectBuilder.modifiers("ORDER BY " + playerFilter.getOrder());
+        sqlSelectBuilder.modifiers("LIMIT " + playerFilter.getPageSize());
+        sqlSelectBuilder.modifiers("OFFSET " + playerFilter.getPageNumber() * playerFilter.getPageSize());
 
         SqlSelectBuilder.SqlSelectBuilderResult result = sqlSelectBuilder.build();
 
         try {
-            return jdbcTemplate.query(result.getSql(), new PlayerMapper(), result.getValues());
+            return jdbcTemplate.query(result.getSql(), playerMapper, result.getValues());
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
@@ -45,21 +46,22 @@ public class PlayerDaoImpl implements PlayerDao {
 
     @Override
     public Integer getCount(PlayerFilter playerFilter) {
-        List<String> columns = new ArrayList<>(Arrays.asList("COUNT(*)"));
+        SqlSelectBuilder sqlSelectBuilder = getBaseSqlSelectBuilderFromPlayerFilter(playerFilter);
 
-        List<String> joinTables = new ArrayList<>();
+        sqlSelectBuilder.columns("COUNT(*)");
+        sqlSelectBuilder.mainTable(mainTable);
 
         if (playerFilter.getRace() != null) {
-            joinTables.add("race ON player.race_id = race.id");
+            sqlSelectBuilder.joinTables(joinRaceTable);
         }
         if (playerFilter.getProfession() != null) {
-            joinTables.add("profession ON player.profession_id = profession.id");
+            sqlSelectBuilder.joinTables(joinProfessionTable);
         }
 
-        SelectSqlRequest selectSqlRequest = getBaseSqlSelectBuilderFromPlayerFilter(playerFilter, columns, joinTables, "player", null);
+        SqlSelectBuilder.SqlSelectBuilderResult result = sqlSelectBuilder.build();
 
         try {
-            return jdbcTemplate.queryForObject(selectSqlRequest.getSql(), Integer.class, selectSqlRequest.getValues().toArray());
+            return jdbcTemplate.queryForObject(result.getSql(), Integer.class, result.getValues());
         } catch (EmptyResultDataAccessException e) {
             return 0;
         }
@@ -88,21 +90,22 @@ public class PlayerDaoImpl implements PlayerDao {
             return ps;
         }, keyHolder);
         //написано что может быть nullpointerexception что делать в таком случае отлавливать и что вернуть? как будет правильнее
-
         return getById((Long) keyHolder.getKey());
     }
 
     @Override
     public Player getById(long id) {
-        List<String> columns = new ArrayList<>(Arrays.asList("player.id", "player.name", "title", "race.name as race_name",
-                "profession.name as profession_name", "birthday", "banned", "experience", "level", "untilNextLevel"));
+        SqlSelectBuilder sqlSelectBuilder = new SqlSelectBuilder();
 
-        List<String> joinTables = new ArrayList<>(Arrays.asList("race ON player.race_id = race.id", "profession ON player.profession_id = profession.id"));
+        sqlSelectBuilder.columns(columns);
+        sqlSelectBuilder.mainTable(mainTable);
+        sqlSelectBuilder.joinTables(joinRaceTable, joinProfessionTable);
+        sqlSelectBuilder.conditions("player.id = ?");
 
-        String sql = SelectSqlRequest.builder().columns(columns).mainTable("player").joinTables(joinTables)
-                .conditions(new ArrayList<>(Arrays.asList("player.id = ?"))).build().getSql();
+        SqlSelectBuilder.SqlSelectBuilderResult result = sqlSelectBuilder.build();
+
         try {
-            return jdbcTemplate.queryForObject(sql, new PlayerMapper(), id);
+            return jdbcTemplate.queryForObject(result.getSql(), playerMapper, id);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
@@ -154,54 +157,53 @@ public class PlayerDaoImpl implements PlayerDao {
         return playerForDelete;
     }
 
-    //НЕ ЗАБЫТЬ ПРЕДЛОЖИТЬ ИДЕЮ ПО ИЗМЕНЕНИЮ ЭТОГО МЕТОДА ТАК КАК ЕГО ЗАДАЧА ВСЕ ЖЕ НЕ В ПОСТРОЕНИИ ЗАПРОСА А В ФОРМИРОВАНИИ УСЛОВИЙ И ЗНАЧЕНИЙ
     private SqlSelectBuilder getBaseSqlSelectBuilderFromPlayerFilter(PlayerFilter playerFilter) {
         SqlSelectBuilder sqlSelectBuilder = new SqlSelectBuilder();
 
         if (playerFilter.getName() != null) {
-            sqlSelectBuilder.condition("player.name LIKE ?");
-            //values.add("%" + playerFilter.getName() + "%");
+            sqlSelectBuilder.conditions("player.name LIKE ?");
+            sqlSelectBuilder.values("%" + playerFilter.getName() + "%");
         }
-//        if (playerFilter.getTitle() != null) {
-//            conditions.add("title LIKE ?");
-//            values.add("%" + playerFilter.getTitle() + "%");
-//        }
-//        if (playerFilter.getRace() != null) {
-//            conditions.add("race.name = ?");
-//            values.add(playerFilter.getRace().name());
-//        }
-//        if (playerFilter.getProfession() != null) {
-//            conditions.add("profession.name = ?");
-//            values.add(playerFilter.getProfession().name());
-//        }
-//        if (playerFilter.getAfter() != null) {
-//            conditions.add("birthday > ?");
-//            values.add(playerFilter.getAfter());
-//        }
-//        if (playerFilter.getBefore() != null) {
-//            conditions.add("birthday < ?");
-//            values.add(playerFilter.getBefore());
-//        }
-//        if (playerFilter.getMinExperience() != null) {
-//            conditions.add("experience >= ?");
-//            values.add(playerFilter.getMinExperience());
-//        }
-//        if (playerFilter.getMaxExperience() != null) {
-//            conditions.add("experience <= ?");
-//            values.add(playerFilter.getMaxExperience());
-//        }
-//        if (playerFilter.getMinLevel() != null) {
-//            conditions.add("level >= ?");
-//            values.add(playerFilter.getMinLevel());
-//        }
-//        if (playerFilter.getMaxLevel() != null) {
-//            conditions.add("level <= ?");
-//            values.add(playerFilter.getMaxLevel());
-//        }
-//        if (playerFilter.getBanned() != null) {
-//            conditions.add("banned = ?");
-//            values.add(playerFilter.getBanned());
-//        }
+        if (playerFilter.getTitle() != null) {
+            sqlSelectBuilder.conditions("title LIKE ?");
+            sqlSelectBuilder.values("%" + playerFilter.getTitle() + "%");
+        }
+        if (playerFilter.getRace() != null) {
+            sqlSelectBuilder.conditions("race.name = ?");
+            sqlSelectBuilder.values(playerFilter.getRace().name());
+        }
+        if (playerFilter.getProfession() != null) {
+            sqlSelectBuilder.conditions("profession.name = ?");
+            sqlSelectBuilder.values(playerFilter.getProfession().name());
+        }
+        if (playerFilter.getAfter() != null) {
+            sqlSelectBuilder.conditions("birthday > ?");
+            sqlSelectBuilder.values(playerFilter.getAfter());
+        }
+        if (playerFilter.getBefore() != null) {
+            sqlSelectBuilder.conditions("birthday < ?");
+            sqlSelectBuilder.values(playerFilter.getBefore());
+        }
+        if (playerFilter.getMinExperience() != null) {
+            sqlSelectBuilder.conditions("experience >= ?");
+            sqlSelectBuilder.values(playerFilter.getMinExperience());
+        }
+        if (playerFilter.getMaxExperience() != null) {
+            sqlSelectBuilder.conditions("experience <= ?");
+            sqlSelectBuilder.values(playerFilter.getMaxExperience());
+        }
+        if (playerFilter.getMinLevel() != null) {
+            sqlSelectBuilder.conditions("level >= ?");
+            sqlSelectBuilder.values(playerFilter.getMinLevel());
+        }
+        if (playerFilter.getMaxLevel() != null) {
+            sqlSelectBuilder.conditions("level <= ?");
+            sqlSelectBuilder.values(playerFilter.getMaxLevel());
+        }
+        if (playerFilter.getBanned() != null) {
+            sqlSelectBuilder.conditions("banned = ?");
+            sqlSelectBuilder.values(playerFilter.getBanned());
+        }
         return sqlSelectBuilder;
     }
 }
